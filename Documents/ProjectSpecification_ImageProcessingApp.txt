@@ -1,0 +1,43 @@
+Aplicatia procesare imagine (C++) (tema pentru 2-3 persoane)
+- implementarea unei aplicatii destinata vizualizarii si procesarii imaginilor cu algoritmi dedicati.
+
+Cerinte:
+- implementarea GUI in Qt 
+- implementare algoritmi in librarii dedicate (DLL-uri)
+- implementare teste (cpp unit tests, google tests, etc.)
+- documentarea codului cu Doxygen
+- versionarea codului sursa folosind sistemul de versionare Git
+- generarea solutiei folosind CMake;
+- setarea directoarelor de output, directoare temporare; 
+- separarea codului sursa de elementele generate (binare, fisiere temporare)
+
+Specificatiile proiectului vor fi detaliate pe parcursul dezvoltarii acestuia.
+Dintre functionalitatiile care sunt obligatorii sa fie implementate se enumera: 
+- meniu (File, Edit, View, Help, etc.) cu submeniuri specifice
+- scurtaturi - combinatii de taste pentru a accesa diferite functionalitati, meniu setari pentru a configura scurtaturile
+- incarcarea de imagini - multiple formate disponibile (*.png, *.jpeg, *.jpg, *.tiff, *.bmp, *.ppm) 
+- o lista cu imagini recente 
+- editarea imaginilor folosind un meniu dedicat
+- undo/redo 
+- realizarea si vizualizarea histogramei unei imagini
+- diferiti algoritmi aplicati imaginii
+	- blur
+	- two tones
+	- grayscale
+	- negative
+	- Emboss
+	- oil paint
+	- sepia
+	- pop art + text (see: https://popartstudio.nl "yes we can")
+	- two colors + threshold, selectable backgroung and foreground color 
+	+ alti algoritmi similari cu ce se gaseste la link-ul anterior
+	
+
+Aplicatii necesare: 
+Un mediu de dezvoltare: VS2017
+Qt
+CMake
+Notepad++
+WinMerge
+Git
+TortoiseGit

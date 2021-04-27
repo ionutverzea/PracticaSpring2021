@@ -1,0 +1,45 @@
+Proiect practica "Implementarea jocului Rentz"
+
+Rentz V 1.0 (Score Keeper)
+Rentz V 2.0 (Fast Score)
+Rentz V 3.0 (Online)
+
+Technology and applications to be used:
+	C++
+	Qt Creator
+	SVN (client Tortoise SVN)
+	Visual Studio 2017
+	
+Rentz V 1.0 (Score Keeper)
+The game is played using a card deck. Only the score is kept using the application. The "game master" holds the score for all players.
+Requirements:
+	- implements game rules
+	- Graphical User Interface (GUI)
+	- scoreboard
+	- test cases (GUI testing, code validation tests)
+	- Code Documentation
+	- Setup package
+
+Rentz V2.0 (Fast Score)
+The application enables each player to input it's data related to game result.
+Requirements:
+	- extends V 1.0
+	- enables multi player game
+	- LAN communication (server - client architecture)
+		- "server" make the game and centralize all data
+		- "client" connects to server, send/receive updates
+	- test cases (GUI testing, code validation tests)
+	- Code Documentation
+	- Setup package
+Feature:
+	- can be used on portable and/or mobile devices (Android app, PC app (Windows)).
+	
+Rentz V3.0 (Online)
+Game can be played against other human player and/or against virtual players. Can be played inside a LAN.
+Requirements:
+	- enables the user to play on PC or mobile platforms (without using a physical card deck)
+	- implements virtual player (play with AI (to be detailed))
+	- implements virtual card deck and virtual game table.
+	- test cases (GUI testing, code validation tests)	
+	- Code Documentation
+	- Setup package
