@@ -11,7 +11,7 @@ source_group ("Source Files" FILES ${sources})
 include_directories (${GraphicalProcessingDLL_IncludeDir} ${UIDLL_IncludeDir} ${OpenCV_INCLUDE_DIRS})
 link_directories (${OpenCV_LIB_DIR})
 
-add_executable (App ${sources})
+add_executable (App ${sources} ${headers})
 
 SET(OpenCV_DLL_Path "${OpenCV_DIR}/x64/vc16/bin")
 # SET(PathRelease "${OpenCV_DIR}/x64/vc16/bin")
