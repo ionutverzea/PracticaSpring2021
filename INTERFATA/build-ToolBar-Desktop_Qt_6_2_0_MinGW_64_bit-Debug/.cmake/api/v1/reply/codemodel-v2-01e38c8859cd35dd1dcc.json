@@ -1,0 +1,77 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ToolBar",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ToolBar::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ToolBar-Debug-ba504267ce4367619689.json",
+					"name" : "ToolBar",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ToolBar_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ToolBar_autogen-Debug-16c47e6cbae148eabcfb.json",
+					"name" : "ToolBar_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ToolBar_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ToolBar_autogen_timestamp_deps-Debug-1e8ff22b2d5c00f57ec7.json",
+					"name" : "ToolBar_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/PB_SIEMENS/INTERFATA/build-ToolBar-Desktop_Qt_6_2_0_MinGW_64_bit-Debug",
+		"source" : "D:/PB_SIEMENS/INTERFATA/ToolBar"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}
