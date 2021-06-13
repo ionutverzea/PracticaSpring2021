@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/rec">
+        <file>img/about.jpg</file>
+        <file>img/exit.jpg</file>
+        <file>img/info.png</file>
+        <file>img/open.png</file>
+        <file>img/recent file.png</file>
+        <file>img/save as.jpg</file>
+        <file>img/save.png</file>
+        <file>img/zoom.jpg</file>
+    </qresource>
+</RCC>

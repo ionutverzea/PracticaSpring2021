@@ -1,0 +1,1 @@
+set (sources "${CMAKE_CURRENT_SOURCE_DIR}/GraphicalAlgorithmsLibrary.cpp" PARENT_SCOPE)
