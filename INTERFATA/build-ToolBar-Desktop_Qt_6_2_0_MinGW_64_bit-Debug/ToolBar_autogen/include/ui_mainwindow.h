@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -33,6 +34,7 @@ public:
     QAction *actionAbout;
     QAction *actionInfo;
     QWidget *centralwidget;
+    QHBoxLayout *horizontalLayout;
     QLabel *label;
     QMenuBar *menubar;
     QMenu *menuFILE;
@@ -83,9 +85,13 @@ public:
         actionInfo->setIcon(icon6);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        horizontalLayout = new QHBoxLayout(centralwidget);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(0, 0, 438, 348));
+
+        horizontalLayout->addWidget(label);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -129,6 +135,9 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         actionOpen->setText(QCoreApplication::translate("MainWindow", "Open", nullptr));
+#if QT_CONFIG(shortcut)
+        actionOpen->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+O", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionSave->setText(QCoreApplication::translate("MainWindow", "Save", nullptr));
         actionSave_as->setText(QCoreApplication::translate("MainWindow", "Save as", nullptr));
         actionRecent_files->setText(QCoreApplication::translate("MainWindow", "Recent files", nullptr));

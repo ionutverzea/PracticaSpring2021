@@ -30,8 +30,12 @@ private slots:
 
     void on_actionInfo_triggered();
 
+    void mouseMoveEvent(QMouseEvent* event);
+    void changeEvent(QEvent*event);
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QImage image;
 };
 #endif // MAINWINDOW_H
