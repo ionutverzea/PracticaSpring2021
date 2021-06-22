@@ -1,0 +1,1 @@
+set (sources "${CMAKE_CURRENT_SOURCE_DIR}/UILibrary.cpp" PARENT_SCOPE)
