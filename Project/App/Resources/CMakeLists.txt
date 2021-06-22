@@ -1,0 +1,10 @@
+set (resources "${CMAKE_CURRENT_SOURCE_DIR}/about.jpg" 
+			 "${CMAKE_CURRENT_SOURCE_DIR}/exit.jpg"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/exit.png"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/info.png"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/open.png"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/recent_file.png"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/save.png"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/save_as.jpg"
+			 "${CMAKE_CURRENT_SOURCE_DIR}/zoom.jpg"
+			 PARENT_SCOPE)

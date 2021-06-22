@@ -6,98 +6,118 @@
 #include <opencv2/imgproc.hpp>
 #include "../../App/include/Utils.h"
 
-#include<QMessageBox>
-#include<QFile>
-#include<QFileDialog>
-#include<QImage>
-#include<QGraphicsItem>
-#include<QGraphicsPixmapItem>
-#include<QGraphicsView>
-#include<QSize>
+#include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QImage>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsView>
+#include <QSize>
+#include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget* parent)
+	: QMainWindow(parent)
+	, ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    //scene = new QGraphicsScene(0,0,500,500);
-
+	ui->setupUi(this);
+	SetIcons();
 }
 
 MainWindow::~MainWindow()
 {
-    delete scene;
-    delete ui;
+	delete scene;
+	delete ui;
 }
 
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString filter =  "All files (*.*);;JPEG(*.jpg);;PNG(*.png);;TIFF(*.tif)";
-       QFile file("C://");
-        QString filename=QFileDialog::getOpenFileName(
-                    this,
-                    tr("Open File"),
-                    "C://",
-                    filter
-                    );
-         if(!filename.isEmpty()){
-               QImage image(filename);
-               //cv::Mat image = Utils::ReadImage(filename.toStdString());
-    //          QGraphicsPixmapItem item(QPixmap::fromImage(image));
-    //           QGraphicsScene scene(this);
-    //           ui->graphicsView->setScene(scene);
-    //           ui->graphicsView->show();
+	QString filter = "All files (*.*);;JPEG(*.jpg);;PNG(*.png);;TIFF(*.tif)";
+	QFile file("C://");
+	QString filename = QFileDialog::getOpenFileName(
+		this,
+		tr("Open File"),
+		"C://",
+		filter
+	);
+	if (!filename.isEmpty())
+	{
+		QImage image(filename);
 
+		int w = ui->label->width();
+		int h = ui->label->height();
+		ui->label->setPixmap(QPixmap::fromImage(image.scaled(w, h, Qt::KeepAspectRatio)));
+		ui->statusbar->showMessage("File loaded");
 
-               int w = ui->label->width();
-               int h = ui->label->height();
-               //QImage img = QImage((uchar*)image.data, image.cols, image.rows, image.step, QImage::Format_RGB888);
-               ui->label->setPixmap(QPixmap::fromImage(image.scaled(w,h,Qt::KeepAspectRatio)));
-               ui->statusbar->showMessage("File loaded");
+		cv::Mat img = Utils::ReadImage(filename.toStdString());
+		Utils::ShowImage(img);
 
-
-         }else{
-
-             ui->statusbar->showMessage("File is not a image");
-    }
+	}
+	else
+	{
+		ui->statusbar->showMessage("File is not a image");
+	}
 }
-
-
 
 void MainWindow::on_actionSave_triggered()
 {
-    QMessageBox::information(this,"title","Save");
+	QMessageBox::information(this, "title", "Save");
 }
-
 
 void MainWindow::on_actionSave_as_triggered()
 {
 
 }
 
-
 void MainWindow::on_actionRecent_files_triggered()
 {
 
 }
 
-
-
 void MainWindow::on_actionExit_triggered()
 {
-    QApplication::quit();
+	qApp->quit();
 }
-
 
 void MainWindow::on_actionAbout_triggered()
 {
 
 }
 
-
 void MainWindow::on_actionInfo_triggered()
 {
 
+}
+
+void MainWindow::SetIcons()
+{
+	//open folder icon
+	QPixmap icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\open.png"));
+	ui->actionOpen->setIcon(QIcon(icon));
+
+	//save icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\save.png"));
+	ui->actionSave->setIcon(QIcon(icon));
+
+	//save as icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\save_as.jpg"));
+	ui->actionSave_as->setIcon(QIcon(icon));
+
+	//exit icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\exit.png"));
+	ui->actionExit->setIcon(QIcon(icon));
+
+	//about icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\about.jpg"));
+	ui->actionAbout->setIcon(QIcon(icon));
+
+	//recent files icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\recent_file.png"));
+	ui->actionRecent_files->setIcon(QIcon(icon));
+
+	//info icon
+	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\info.png"));
+	ui->actionInfo->setIcon(QIcon(icon));
 }
 

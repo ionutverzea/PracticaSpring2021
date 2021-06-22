@@ -33,5 +33,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    void SetIcons();
 };
 #endif // MAINWINDOW_H
