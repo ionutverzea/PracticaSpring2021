@@ -1,10 +1,11 @@
 #include "../../App/include/mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
+//#include <opencv2/opencv.hpp>
+//#include <opencv2/highgui.hpp>
+//#include <opencv2/imgproc.hpp>
 #include "../../App/include/Utils.h"
+#include "GraphicalAlgorithmsLibrary.h"
 
 #include <QMessageBox>
 #include <QFile>
@@ -43,15 +44,15 @@ void MainWindow::on_actionOpen_triggered()
 	);
 	if (!filename.isEmpty())
 	{
-		QImage image(filename);
+		image = Utils::ReadImage(filename.toStdString());
+		cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
+		QImage convertedImage = ConvertMatToQImage(image);
 
 		int w = ui->label->width();
 		int h = ui->label->height();
-		ui->label->setPixmap(QPixmap::fromImage(image.scaled(w, h, Qt::KeepAspectRatio)));
+		ui->label->setPixmap(QPixmap::fromImage(convertedImage));
+		ui->label->resize(ui->label->pixmap()->size());
 		ui->statusbar->showMessage("File loaded");
-
-		cv::Mat img = Utils::ReadImage(filename.toStdString());
-		Utils::ShowImage(img);
 
 	}
 	else
@@ -90,6 +91,33 @@ void MainWindow::on_actionInfo_triggered()
 
 }
 
+void MainWindow::on_actionGrayScale_Luminance_triggered()
+{
+	cv::Mat temp = GrayScale_Luminance(image);
+	QImage convertedImage = ConvertMatToQImage(temp);
+	ui->label->setPixmap(QPixmap::fromImage(convertedImage));
+	ui->label->resize(ui->label->pixmap()->size());
+	ui->statusbar->showMessage("GrayScale Luminance filter applied");
+}
+
+void MainWindow::on_actionGrayScale_Average_triggered()
+{
+	cv::Mat temp = GrayScale_Average(image);
+	QImage convertedImage = ConvertMatToQImage(temp);
+	ui->label->setPixmap(QPixmap::fromImage(convertedImage));
+	ui->label->resize(ui->label->pixmap()->size());
+	ui->statusbar->showMessage("GrayScale Average filter applied");
+}
+
+void MainWindow::on_actionSepia_triggered()
+{
+	cv::Mat temp = SepiaFilter(image);
+	QImage convertedImage = ConvertMatToQImage(temp);
+	ui->label->setPixmap(QPixmap::fromImage(convertedImage));
+	ui->label->resize(ui->label->pixmap()->size());
+	ui->statusbar->showMessage("Sepia filter applied");
+}
+
 void MainWindow::SetIcons()
 {
 	//open folder icon
@@ -120,4 +148,25 @@ void MainWindow::SetIcons()
 	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\info.png"));
 	ui->actionInfo->setIcon(QIcon(icon));
 }
+
+QImage MainWindow::ConvertMatToQImage(const cv::Mat& source)
+{
+	cv::Mat cpyImage = source;
+	if (cpyImage.channels() == 4)
+	{
+		QImage result = QImage((uchar*)cpyImage.data, cpyImage.cols, cpyImage.rows, QImage::Format_ARGB32);
+		return result;
+	}
+	if (cpyImage.channels() == 3)
+	{
+		QImage result = QImage((uchar*)cpyImage.data, cpyImage.cols, cpyImage.rows, QImage::Format_RGB888);
+		return result;
+	}
+	if (cpyImage.channels() == 1)
+	{
+		QImage result = QImage((uchar*)cpyImage.data, cpyImage.cols, cpyImage.rows, QImage::Format_Indexed8);
+		return result;
+	}
+}
+
 

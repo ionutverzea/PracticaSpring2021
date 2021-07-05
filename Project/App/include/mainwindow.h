@@ -1,6 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
 #include <QMainWindow>
 #include<QGraphicsScene>
 QT_BEGIN_NAMESPACE
@@ -30,9 +34,17 @@ private slots:
 
     void on_actionInfo_triggered();
 
+    void on_actionGrayScale_Luminance_triggered();
+
+    void on_actionGrayScale_Average_triggered();
+
+    void on_actionSepia_triggered();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    cv::Mat image;
     void SetIcons();
+    QImage ConvertMatToQImage(const cv::Mat& source);
 };
 #endif // MAINWINDOW_H

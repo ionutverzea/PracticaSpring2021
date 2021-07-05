@@ -56,5 +56,13 @@ extern "C" GRAPHICALLIBRARY_API cv::Mat KernelGenerator(int size);
 ///\return			cv::Mat object containing the image with the emboss efect applied on it
 extern "C" GRAPHICALLIBRARY_API cv::Mat Emboss(cv::Mat image);
 
+///\brief				Function that changes the brightness of a given image
+///\param [in]	image		cv::Mat object containing the image that the user wants to modify
+///\param [in]	scale		integer representing the number depending on which the pixels will be modified
+///\return				cv::Mat object containing the image with the changed brightness
+extern "C" GRAPHICALLIBRARY_API cv::Mat Brightness(cv::Mat image, int scale);
+
+extern "C" GRAPHICALLIBRARY_API cv::Mat TV_60(cv::Mat image);
+
 ///\brief				Helper function needed for the cv::CreateTrackbar() function
 inline static void nothing(int x, void* data) {};

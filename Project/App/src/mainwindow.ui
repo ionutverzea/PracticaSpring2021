@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>787</width>
     <height>600</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>787</width>
      <height>21</height>
     </rect>
    </property>
@@ -51,6 +51,9 @@
     <property name="title">
      <string>EDIT</string>
     </property>
+    <addaction name="actionGrayScale_Luminance"/>
+    <addaction name="actionGrayScale_Average"/>
+    <addaction name="actionSepia"/>
    </widget>
    <widget class="QMenu" name="menuHELP">
     <property name="title">
@@ -141,6 +144,21 @@
    </property>
    <property name="text">
     <string>Info</string>
+   </property>
+  </action>
+  <action name="actionGrayScale_Luminance">
+   <property name="text">
+    <string>GrayScale Luminance</string>
+   </property>
+  </action>
+  <action name="actionGrayScale_Average">
+   <property name="text">
+    <string>GrayScale Average</string>
+   </property>
+  </action>
+  <action name="actionSepia">
+   <property name="text">
+    <string>Sepia</string>
    </property>
   </action>
  </widget>

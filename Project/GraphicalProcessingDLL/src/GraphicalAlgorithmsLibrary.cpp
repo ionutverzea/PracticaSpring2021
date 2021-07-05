@@ -177,3 +177,49 @@ GRAPHICALLIBRARY_API cv::Mat Emboss(cv::Mat image)
 	}
 	cv::destroyAllWindows();
 }
+
+GRAPHICALLIBRARY_API cv::Mat Brightness(cv::Mat image, int scale) {
+	cv::Mat result;
+
+	image.convertTo(result, -1, 1, scale);
+
+	return result;
+}
+
+GRAPHICALLIBRARY_API cv::Mat TV_60(cv::Mat image)
+{
+	cv::namedWindow("image");
+	int slider = 0;
+	int slider2 = 0;
+	cv::createTrackbar("val", "image", &slider, 255, nothing);
+	cv::createTrackbar("treshold", "image", &slider2, 100, nothing);
+	while (true)
+	{
+		int height = image.size().height;
+		int width = image.size().width;
+		cv::Mat gray;
+		cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
+		float tresh = cv::getTrackbarPos("treshold", "image");
+		float val = cv::getTrackbarPos("val", "image");
+
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				if (rand() % 100 <= tresh) {
+					if (rand() % 2 == 0)
+						gray.at<uchar>(i, j) = std::min(gray.at<uchar>(i, j) + rand() % ((int)val + 1), 255);
+					else
+						gray.at<uchar>(i, j) = std::max(gray.at<uchar>(i, j) - rand() % ((int)val + 1), 0);
+				}
+			}
+		}
+		cv::imshow("image", gray);
+		if (cv::waitKey(1) == 'q')
+		{
+			return gray;
+		}
+	}
+	cv::destroyAllWindows();
+}
+
