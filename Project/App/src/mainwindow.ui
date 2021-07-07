@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>787</width>
+    <width>800</width>
     <height>600</height>
    </rect>
   </property>
@@ -14,26 +14,22 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>438</width>
-      <height>348</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>787</width>
+     <width>800</width>
      <height>21</height>
     </rect>
    </property>
@@ -54,6 +50,12 @@
     <addaction name="actionGrayScale_Luminance"/>
     <addaction name="actionGrayScale_Average"/>
     <addaction name="actionSepia"/>
+    <addaction name="actionBlur"/>
+    <addaction name="actionNegative"/>
+    <addaction name="actionTwo_Tones"/>
+    <addaction name="actionEmboss"/>
+    <addaction name="actionBrightness"/>
+    <addaction name="actionTV_60"/>
    </widget>
    <widget class="QMenu" name="menuHELP">
     <property name="title">
@@ -90,6 +92,9 @@
    </property>
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionSave">
@@ -159,6 +164,36 @@
   <action name="actionSepia">
    <property name="text">
     <string>Sepia</string>
+   </property>
+  </action>
+  <action name="actionBlur">
+   <property name="text">
+    <string>Blur</string>
+   </property>
+  </action>
+  <action name="actionNegative">
+   <property name="text">
+    <string>Negative</string>
+   </property>
+  </action>
+  <action name="actionTwo_Tones">
+   <property name="text">
+    <string>Two Tones</string>
+   </property>
+  </action>
+  <action name="actionEmboss">
+   <property name="text">
+    <string>Emboss</string>
+   </property>
+  </action>
+  <action name="actionBrightness">
+   <property name="text">
+    <string>Brightness</string>
+   </property>
+  </action>
+  <action name="actionTV_60">
+   <property name="text">
+    <string>TV_60</string>
    </property>
   </action>
  </widget>

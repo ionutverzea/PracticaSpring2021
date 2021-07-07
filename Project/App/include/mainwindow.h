@@ -40,11 +40,28 @@ private slots:
 
     void on_actionSepia_triggered();
 
+    void on_actionBlur_triggered();
+
+    void on_actionNegative_triggered();
+
+    void on_actionTwo_Tones_triggered();
+
+    void on_actionEmboss_triggered();
+
+    void on_actionBrightness_triggered();
+
+    void on_actionTV_60_triggered();
+
+    void mouseMoveEvent(QMouseEvent* event);
+    void changeEvent(QEvent*event);
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QImage qImage;
     cv::Mat image;
     void SetIcons();
     QImage ConvertMatToQImage(const cv::Mat& source);
+    void SetLabel(const QImage& img, const QString& text);
 };
 #endif // MAINWINDOW_H
