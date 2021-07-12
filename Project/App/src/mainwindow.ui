@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>808</width>
     <height>600</height>
    </rect>
   </property>
@@ -29,7 +29,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>808</width>
      <height>21</height>
     </rect>
    </property>
@@ -105,6 +105,9 @@
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSave_as">
    <property name="icon">
@@ -113,6 +116,9 @@
    </property>
    <property name="text">
     <string>Save as</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+S</string>
    </property>
   </action>
   <action name="actionRecent_files">
@@ -123,6 +129,9 @@
    <property name="text">
     <string>Recent files</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="icon">
@@ -131,6 +140,9 @@
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -141,6 +153,9 @@
    <property name="text">
     <string>About</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+A</string>
+   </property>
   </action>
   <action name="actionInfo">
    <property name="icon">
@@ -149,6 +164,9 @@
    </property>
    <property name="text">
     <string>Info</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+I</string>
    </property>
   </action>
   <action name="actionGrayScale_Luminance">

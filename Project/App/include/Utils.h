@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
+#include <QtCore/qstring.h>
 
 
 class Utils
@@ -17,4 +18,7 @@ public:
 	///\param [in]	image		cv::Mat object containing the image to be shown
 	static void ShowImage(cv::Mat image);
 
+	static std::vector<QString> ReadFile(const std::string& filepath);
+
+	static void WriteFile(const std::string& filepath, std::vector<QString> files);
 };

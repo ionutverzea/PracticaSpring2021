@@ -19,16 +19,19 @@
 #include<QResizeEvent>
 #include<QEvent>
 
+
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
 	SetIcons();
+	recentFiles = Utils::ReadFile("recentFiles.txt");
 }
 
 MainWindow::~MainWindow()
 {
+	Utils::WriteFile("recentFiles.txt", recentFiles);
 	delete scene;
 	delete ui;
 }
@@ -46,6 +49,16 @@ void MainWindow::on_actionOpen_triggered()
 	);
 	if (!filename.isEmpty())
 	{
+		if (recentFiles.size() < 10)
+		{
+			recentFiles.push_back(filename);
+		}
+		else
+		{
+			recentFiles.pop_back();
+			recentFiles.push_back(filename);
+		}
+
 		image = Utils::ReadImage(filename.toStdString());
 		cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
 		QImage convertedImage = ConvertMatToQImage(image);
@@ -73,26 +86,36 @@ void MainWindow::on_actionSave_triggered()
 {
 	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"),
 		QString(),
-		tr("Images (*.png)"));
+		tr("PNG(*.png)"));
 	if (!fileName.isEmpty())
 	{
 		qImage = ConvertMatToQImage(image);
 		qImage.save(fileName);
 	}
 	ui->statusbar->showMessage("Image save");
-
 }
 
 
 void MainWindow::on_actionSave_as_triggered()
 {
-
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"),
+		QString(),
+		tr("PNG(*.png);;JPG(*.jpg);;TIFF(*.tif);;GIF(*.gif)"));
+	if (!fileName.isEmpty())
+	{
+		qImage = ConvertMatToQImage(image);
+		qImage.save(fileName);
+	}
+	ui->statusbar->showMessage("Image save");
 }
 
 
 void MainWindow::on_actionRecent_files_triggered()
 {
-
+	for each (QString var in recentFiles)
+	{
+		std::cout << var.toStdString() << std::endl;
+	}
 }
 
 
@@ -105,13 +128,19 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-
+	QMessageBox about;
+	about.setWindowTitle("About");
+	about.setText("Program de editare grafica a pozelor, implementat cu ajutorul OpenCV si Qt.");
+	about.exec();
 }
 
 
 void MainWindow::on_actionInfo_triggered()
 {
-
+	QMessageBox info;
+	info.setWindowTitle("Info");
+	info.setText("Program realizat in cadrul programului de internship Siemens.");
+	info.exec();
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
@@ -216,7 +245,7 @@ void MainWindow::on_actionEmboss_triggered()
 void MainWindow::on_actionBrightness_triggered()
 {
 	bool ok;
-	int value = QInputDialog::getInt(this, tr("Integer"), tr("Enter a number for the kernel size of the blur"), 0, 0, 100, 1, &ok);
+	int value = QInputDialog::getInt(this, tr("Integer"), tr("Enter a number representing the scale of the brightness"), 0, 0, 100, 1, &ok);
 	if (ok)
 	{
 		cv::Mat temp = Brightness(image, value);
