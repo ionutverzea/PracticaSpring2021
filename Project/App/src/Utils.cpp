@@ -34,10 +34,13 @@ std::vector<QString> Utils::ReadFile(const std::string& filepath)
 	std::ifstream myfile("recentFiles.txt");
 	if (myfile.is_open())
 	{
+		std::string line;
 		while (!myfile.eof())
 		{
-			std::string line;
 			std::getline(myfile, line);
+			//std::cout << line << std::endl;
+			//if (line[line.size() - 1] == '\n')
+			//	line[line.size() - 1] = '\0';
 			QString qline = QString::fromStdString(line);
 			temp.push_back(qline);
 		}

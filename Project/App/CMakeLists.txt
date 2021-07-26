@@ -34,12 +34,20 @@ message("	CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
 SET (Qt5_DLLs_D ${Qt5_DLL_Path}/Qt5Widgetsd.dll
 				${Qt5_DLL_Path}/Qt5Cored.dll
 				${Qt5_DLL_Path}/Qt5Guid.dll	)
+SET (QT5_PDBs_D ${Qt5_DLL_Path}/Qt5Widgetsd.pdb
+				${Qt5_DLL_Path}/Qt5Cored.pdb
+				${Qt5_DLL_Path}/Qt5Guid.pdb	)
 SET (Qt5_DLLs_R ${Qt5_DLL_Path}/Qt5Widgets.dll
 				${Qt5_DLL_Path}/Qt5Core.dll
 				${Qt5_DLL_Path}/Qt5Gui.dll	)
+SET (Qt5_PDBs_R ${Qt5_DLL_Path}/Qt5Widgets.pdb
+				${Qt5_DLL_Path}/Qt5Core.pdb
+				${Qt5_DLL_Path}/Qt5Gui.pdb	)
 
 install (FILES ${Qt5_DLLs_D} DESTINATION ${CMAKE_BINARY_DIR}/build/bin/X64/Debug CONFIGURATIONS Debug)
+install (FILES ${Qt5_PDBs_D} DESTINATION ${CMAKE_BINARY_DIR}/build/bin/X64/Debug CONFIGURATIONS Debug)
 install (FILES ${Qt5_DLLs_R} DESTINATION ${CMAKE_BINARY_DIR}/build/bin/X64/Release CONFIGURATIONS Release)
+install (FILES ${Qt5_PDBs_R} DESTINATION ${CMAKE_BINARY_DIR}/build/bin/X64/Release CONFIGURATIONS Release)
 
 target_link_libraries (App GraphicalProcessingDLL ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS})
 

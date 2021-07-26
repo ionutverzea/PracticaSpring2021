@@ -4,21 +4,22 @@
 #include "../../App/include/Utils.h"
 #include "GraphicalAlgorithmsLibrary.h"
 
-#include<QMessageBox>
-#include<QFile>
-#include<QFileDialog>
-#include<QInputDialog>
-#include<QImage>
-#include<QGraphicsItem>
-#include<QGraphicsPixmapItem>
-#include<QGraphicsView>
-#include<QSize>
-#include<QLayout>
-#include<QRect>
-#include<iostream>
-#include<QResizeEvent>
-#include<QEvent>
-
+#include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QImage>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsView>
+#include <QSize>
+#include <QLayout>
+#include <QRect>
+#include <iostream>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -49,7 +50,7 @@ void MainWindow::on_actionOpen_triggered()
 	);
 	if (!filename.isEmpty())
 	{
-		if (recentFiles.size() < 10)
+		if (recentFiles.size() < 9)
 		{
 			recentFiles.push_back(filename);
 		}
@@ -69,16 +70,9 @@ void MainWindow::on_actionOpen_triggered()
 		ui->label->resize(ui->label->pixmap()->size());
 		ui->statusbar->showMessage("File loaded " + filename);
 		qImage = convertedImage;
-
-		/*QRect geometry = ui->centralwidget->geometry();
-		w = geometry.width();
-		h = geometry.height();
-
-		ui->label->setPixmap(QPixmap::fromImage(qImage.scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));*/
 	}
 	else
 		ui->statusbar->showMessage("File is not an image");
-
 }
 
 
@@ -94,7 +88,6 @@ void MainWindow::on_actionSave_triggered()
 	}
 	ui->statusbar->showMessage("Image save");
 }
-
 
 void MainWindow::on_actionSave_as_triggered()
 {
@@ -112,13 +105,30 @@ void MainWindow::on_actionSave_as_triggered()
 
 void MainWindow::on_actionRecent_files_triggered()
 {
+	QListWidget* listWidget = new QListWidget;
+	listWidget->setWindowTitle("Recent files");
 	for each (QString var in recentFiles)
+		listWidget->addItem(var);
+	listWidget->show();
+
+	//listWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
+	//listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+	//listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
+	
+	if (listWidget->item(0))
 	{
-		std::cout << var.toStdString() << std::endl;
+		image = Utils::ReadImage(recentFiles.at(0).toStdString());
+		cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
+		QImage convertedImage = ConvertMatToQImage(image);
+
+		int w = ui->label->width();
+		int h = ui->label->height();
+		ui->label->setPixmap(QPixmap::fromImage(convertedImage));
+		ui->label->resize(ui->label->pixmap()->size());
+		ui->statusbar->showMessage("File loaded " + recentFiles.at(0));
+		qImage = convertedImage;
 	}
 }
-
-
 
 void MainWindow::on_actionExit_triggered()
 {
@@ -142,6 +152,7 @@ void MainWindow::on_actionInfo_triggered()
 	info.setText("Program realizat in cadrul programului de internship Siemens.");
 	info.exec();
 }
+
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
