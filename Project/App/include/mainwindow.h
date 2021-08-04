@@ -7,6 +7,8 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <iostream>
 #include <fstream>
 
@@ -40,12 +42,15 @@ private slots:
     void on_actionBrightness_triggered();
     void on_actionTV_60_triggered();
 
+    void on_Item_Row_Changed(int currentRow);
+
     void mouseMoveEvent(QMouseEvent* event);
     void changeEvent(QEvent*event);
 
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QListWidget* listWidget;
     QImage qImage;
     cv::Mat image;
     std::vector<QString> recentFiles;
@@ -54,5 +59,6 @@ private:
     void SetIcons();
     QImage ConvertMatToQImage(const cv::Mat& source);
     void SetLabel(const QImage& img, const QString& text);
+    void CreateActions();
 };
 #endif // MAINWINDOW_H

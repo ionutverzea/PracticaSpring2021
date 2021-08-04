@@ -18,8 +18,7 @@
 #include <iostream>
 #include <QResizeEvent>
 #include <QEvent>
-#include <QListWidget>
-#include <QListWidgetItem>
+
 
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
@@ -28,6 +27,15 @@ MainWindow::MainWindow(QWidget* parent)
 	ui->setupUi(this);
 	SetIcons();
 	recentFiles = Utils::ReadFile("recentFiles.txt");
+
+	listWidget = new QListWidget();
+	listWidget->setWindowTitle("Recent files");
+	listWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
+	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+	listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
+	listWidget->setVisible(false);
+
+	CreateActions();
 }
 
 MainWindow::~MainWindow()
@@ -36,7 +44,6 @@ MainWindow::~MainWindow()
 	delete scene;
 	delete ui;
 }
-
 
 void MainWindow::on_actionOpen_triggered()
 {
@@ -50,14 +57,17 @@ void MainWindow::on_actionOpen_triggered()
 	);
 	if (!filename.isEmpty())
 	{
-		if (recentFiles.size() < 9)
+		if (recentFiles.size() < 10)
 		{
 			recentFiles.push_back(filename);
 		}
 		else
 		{
-			recentFiles.pop_back();
-			recentFiles.push_back(filename);
+			for (int i = recentFiles.size() - 1; i > 1; i--)
+			{
+				recentFiles.at(i) = recentFiles.at(i - 1);
+			}
+			recentFiles.at(0) = filename;
 		}
 
 		image = Utils::ReadImage(filename.toStdString());
@@ -102,22 +112,11 @@ void MainWindow::on_actionSave_as_triggered()
 	ui->statusbar->showMessage("Image save");
 }
 
-
-void MainWindow::on_actionRecent_files_triggered()
+void MainWindow::on_Item_Row_Changed(int currentRow)
 {
-	QListWidget* listWidget = new QListWidget;
-	listWidget->setWindowTitle("Recent files");
-	for each (QString var in recentFiles)
-		listWidget->addItem(var);
-	listWidget->show();
-
-	//listWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
-	//listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-	//listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
-	
-	if (listWidget->item(0))
+	if (currentRow != -1)
 	{
-		image = Utils::ReadImage(recentFiles.at(0).toStdString());
+		image = Utils::ReadImage(recentFiles.at(currentRow).toStdString());
 		cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
 		QImage convertedImage = ConvertMatToQImage(image);
 
@@ -125,9 +124,21 @@ void MainWindow::on_actionRecent_files_triggered()
 		int h = ui->label->height();
 		ui->label->setPixmap(QPixmap::fromImage(convertedImage));
 		ui->label->resize(ui->label->pixmap()->size());
-		ui->statusbar->showMessage("File loaded " + recentFiles.at(0));
+		ui->statusbar->showMessage("File loaded " + recentFiles.at(currentRow));
 		qImage = convertedImage;
 	}
+}
+
+void MainWindow::on_actionRecent_files_triggered()
+{
+	listWidget->clear();
+	for (int i = 0; i < 9; i++)
+		listWidget->addItem(recentFiles.at(i));
+
+	listWidget->show();
+	listWidget->setVisible(true);
+
+	connect(listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(on_Item_Row_Changed(int)));
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -156,11 +167,9 @@ void MainWindow::on_actionInfo_triggered()
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
-
 	QRect geometry = ui->centralwidget->geometry();
 	int w = geometry.width();
 	int h = geometry.height();
-
 
 	ui->label->setPixmap(QPixmap::fromImage(qImage.scaled(w, h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
 }
@@ -303,6 +312,11 @@ void MainWindow::SetIcons()
 	//info icon
 	icon = QPixmap(QString("C:\\Users\\Laur\\source\\repos\\Practica Siemens\\Application\\App\\Resources\\info.png"));
 	ui->actionInfo->setIcon(QIcon(icon));
+}
+
+void MainWindow::CreateActions()
+{
+	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 QImage MainWindow::ConvertMatToQImage(const cv::Mat& source)
