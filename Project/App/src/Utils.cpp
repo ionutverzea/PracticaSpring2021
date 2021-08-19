@@ -31,16 +31,13 @@ void Utils::ShowImage(cv::Mat image)
 std::vector<QString> Utils::ReadFile(const std::string& filepath)
 {
 	std::vector<QString> temp;
-	std::ifstream myfile("recentFiles.txt");
+	std::ifstream myfile(filepath);
 	if (myfile.is_open())
 	{
 		std::string line;
 		while (!myfile.eof())
 		{
 			std::getline(myfile, line);
-			//std::cout << line << std::endl;
-			//if (line[line.size() - 1] == '\n')
-			//	line[line.size() - 1] = '\0';
 			QString qline = QString::fromStdString(line);
 			temp.push_back(qline);
 		}
@@ -55,7 +52,7 @@ std::vector<QString> Utils::ReadFile(const std::string& filepath)
 
 void Utils::WriteFile(const std::string& filepath, std::vector<QString> files)
 {
-	std::ofstream myfile("recentFiles.txt");
+	std::ofstream myfile(filepath);
 	if (myfile.is_open())
 	{
 		for each (QString var in files)

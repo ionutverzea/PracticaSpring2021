@@ -56,6 +56,10 @@
     <addaction name="actionEmboss"/>
     <addaction name="actionBrightness"/>
     <addaction name="actionTV_60"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo_2"/>
+    <addaction name="actionRedo_2"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHELP">
     <property name="title">
@@ -212,6 +216,32 @@
   <action name="actionTV_60">
    <property name="text">
     <string>TV_60</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionUndo_2">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo_2">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
  </widget>

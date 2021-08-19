@@ -25,14 +25,12 @@ MainWindow::MainWindow(QWidget* parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
 	SetIcons();
 	recentFiles = Utils::ReadFile("recentFiles.txt");
 
 	listWidget = new QListWidget();
 	listWidget->setWindowTitle("Recent files");
-	listWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
-	listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-	listWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
 	listWidget->setVisible(false);
 
 	CreateActions();
@@ -41,20 +39,20 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
 	Utils::WriteFile("recentFiles.txt", recentFiles);
+	undoMatVector.clear();
+	redoMatVector.clear();
+	DisconnectActions();
+
 	delete scene;
 	delete ui;
+	delete listWidget;
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
 	QString filter = "All files (*.*);;JPEG(*.jpg);;PNG(*.png);;TIFF(*.tif)";
 	QFile file("C://");
-	QString filename = QFileDialog::getOpenFileName(
-		this,
-		tr("Open File"),
-		"C://",
-		filter
-	);
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), "C://", filter);
 	if (!filename.isEmpty())
 	{
 		if (recentFiles.size() < 10)
@@ -80,17 +78,15 @@ void MainWindow::on_actionOpen_triggered()
 		ui->label->resize(ui->label->pixmap()->size());
 		ui->statusbar->showMessage("File loaded " + filename);
 		qImage = convertedImage;
+		undoMatVector.push_back(image);
 	}
 	else
 		ui->statusbar->showMessage("File is not an image");
 }
 
-
 void MainWindow::on_actionSave_triggered()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"),
-		QString(),
-		tr("PNG(*.png)"));
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"), QString(), tr("PNG(*.png)"));
 	if (!fileName.isEmpty())
 	{
 		qImage = ConvertMatToQImage(image);
@@ -101,9 +97,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionSave_as_triggered()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"),
-		QString(),
-		tr("PNG(*.png);;JPG(*.jpg);;TIFF(*.tif);;GIF(*.gif)"));
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image File"), QString(), tr("PNG(*.png);;JPG(*.jpg);;TIFF(*.tif);;GIF(*.gif)"));
 	if (!fileName.isEmpty())
 	{
 		qImage = ConvertMatToQImage(image);
@@ -126,26 +120,70 @@ void MainWindow::on_Item_Row_Changed(int currentRow)
 		ui->label->resize(ui->label->pixmap()->size());
 		ui->statusbar->showMessage("File loaded " + recentFiles.at(currentRow));
 		qImage = convertedImage;
+		undoMatVector.push_back(image);
+	}
+}
+
+void MainWindow::on_actionUndo_2_triggered()
+{
+	if (!undoMatVector.empty())
+	{
+		cv::Mat tempImage = undoMatVector.back();
+		redoMatVector.push_back(tempImage);
+		undoMatVector.pop_back();
+
+		QImage tempQImage = ConvertMatToQImage(tempImage);
+		ui->label->setPixmap(QPixmap::fromImage(tempQImage));
+		ui->label->resize(ui->label->pixmap()->size());
+
+		qImage = tempQImage;
+	}
+	else
+	{
+		QMessageBox undoBox;
+		undoBox.setWindowTitle("Error");
+		undoBox.setText("Can't undo anymore !!");
+		undoBox.exec();
+	}
+}
+
+void MainWindow::on_actionRedo_2_triggered()
+{
+	if (!redoMatVector.empty())
+	{
+		cv::Mat tempImage = redoMatVector.back();
+		undoMatVector.push_back(tempImage);
+		redoMatVector.pop_back();
+
+		QImage tempQImage = ConvertMatToQImage(tempImage);
+		ui->label->setPixmap(QPixmap::fromImage(tempQImage));
+		ui->label->resize(ui->label->pixmap()->size());
+
+		qImage = tempQImage;
+	}
+	else
+	{
+		QMessageBox redoBox;
+		redoBox.setWindowTitle("Error");
+		redoBox.setText("Can't redo anymore !!");
+		redoBox.exec();
 	}
 }
 
 void MainWindow::on_actionRecent_files_triggered()
 {
 	listWidget->clear();
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 10; i++)
 		listWidget->addItem(recentFiles.at(i));
 
 	listWidget->show();
 	listWidget->setVisible(true);
-
-	connect(listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(on_Item_Row_Changed(int)));
 }
 
 void MainWindow::on_actionExit_triggered()
 {
 	QApplication::quit();
 }
-
 
 void MainWindow::on_actionAbout_triggered()
 {
@@ -155,7 +193,6 @@ void MainWindow::on_actionAbout_triggered()
 	about.exec();
 }
 
-
 void MainWindow::on_actionInfo_triggered()
 {
 	QMessageBox info;
@@ -163,7 +200,6 @@ void MainWindow::on_actionInfo_triggered()
 	info.setText("Program realizat in cadrul programului de internship Siemens.");
 	info.exec();
 }
-
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event)
 {
@@ -207,6 +243,9 @@ void MainWindow::on_actionGrayScale_Luminance_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "GrayScale Luminance");
+
+	undoMatVector.push_back(image);
+	qImage = convertedImage;
 }
 
 void MainWindow::on_actionGrayScale_Average_triggered()
@@ -215,6 +254,9 @@ void MainWindow::on_actionGrayScale_Average_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "GrayScale Average");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::on_actionSepia_triggered()
@@ -223,6 +265,9 @@ void MainWindow::on_actionSepia_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "Sepia");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::on_actionBlur_triggered()
@@ -235,6 +280,9 @@ void MainWindow::on_actionBlur_triggered()
 		image = temp;
 		QImage convertedImage = ConvertMatToQImage(temp);
 		SetLabel(convertedImage, "Blur");
+
+		qImage = convertedImage;
+		undoMatVector.push_back(image);
 	}
 }
 
@@ -244,6 +292,9 @@ void MainWindow::on_actionNegative_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "Negative");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::on_actionTwo_Tones_triggered()
@@ -252,6 +303,9 @@ void MainWindow::on_actionTwo_Tones_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "Two Tones");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::on_actionEmboss_triggered()
@@ -260,6 +314,9 @@ void MainWindow::on_actionEmboss_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "Emboss");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::on_actionBrightness_triggered()
@@ -272,6 +329,9 @@ void MainWindow::on_actionBrightness_triggered()
 		image = temp;
 		QImage convertedImage = ConvertMatToQImage(temp);
 		SetLabel(convertedImage, "Brightness");
+
+		qImage = convertedImage;
+		undoMatVector.push_back(image);
 	}
 }
 
@@ -281,6 +341,9 @@ void MainWindow::on_actionTV_60_triggered()
 	image = temp;
 	QImage convertedImage = ConvertMatToQImage(temp);
 	SetLabel(convertedImage, "TV_60");
+
+	qImage = convertedImage;
+	undoMatVector.push_back(image);
 }
 
 void MainWindow::SetIcons()
@@ -317,6 +380,12 @@ void MainWindow::SetIcons()
 void MainWindow::CreateActions()
 {
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(on_Item_Row_Changed(int)));
+}
+
+void MainWindow::DisconnectActions()
+{
+	listWidget->disconnect(SIGNAL(currentRowChanged(int)));
 }
 
 QImage MainWindow::ConvertMatToQImage(const cv::Mat& source)
